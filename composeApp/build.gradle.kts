@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -10,27 +10,26 @@ plugins {
 
 compose.resources {
     publicResClass = true
-    packageOfResClass = "kmp_compose_gradle_skeleton.composeapp.generated.resources"
+    packageOfResClass = "cmp_navigation_3_example.composeapp.generated.resources"
     generateResClass = always
 }
 
 kotlin {
 
     applyDefaultHierarchyTemplate()
-    
+
     android {
         namespace = "com.santimattius.kmp.compose.shared"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
-        
-        // Enable Android resources packaging (official way)
+
         androidResources {
             enable = true
         }
-        
+
         withHostTestBuilder {
         }
-        
+
         withDeviceTestBuilder {
         }
     }
@@ -44,6 +43,14 @@ kotlin {
             baseName = "ComposeApp"
             isStatic = true
         }
+    }
+
+    jvm("desktop")
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.executable()
     }
 
     sourceSets {
@@ -75,25 +82,41 @@ kotlin {
 
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.androidx.navigation.compose)
+
+            // Navigation 3
+            implementation(libs.jetbrains.navigation3.ui)
+            implementation(libs.jetbrains.material3.adaptiveNavigation3)
+            implementation(libs.jetbrains.lifecycle.viewmodelNavigation3)
+
+            // Feature modules
+            implementation(project(":feature-catalog"))
+            implementation(project(":feature-profile"))
+
             implementation(libs.stately.common)
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.serialization.kotlinx.json)
-            implementation(libs.ktor.persistent.cache)
             implementation(libs.kotlinx.coroutines.core)
 
             api(libs.koin.core)
             api(libs.koin.compose)
             api(libs.koin.composeViewModel)
-
-            implementation(libs.resilient)
-            implementation(libs.kvs)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+        }
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.desktop.currentOs)
+                implementation(libs.kotlinx.coroutines.core)
+            }
+        }
+        val wasmJsMain by getting {
+            dependencies {
+                implementation(libs.kotlinx.coroutines.core)
+            }
         }
     }
 }

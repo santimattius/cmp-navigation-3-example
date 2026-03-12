@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material.icons.filled.BedtimeOff
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
@@ -31,8 +32,19 @@ import com.santimattius.kmp.compose.core.ui.components.NetworkImage
 import com.santimattius.kmp.compose.core.ui.themes.AppTheme
 import org.koin.compose.viewmodel.koinViewModel
 
+/**
+ * Home tab main screen.
+ *
+ * ✅ Decoupled: receives navigation lambdas.
+ * The ViewModel is obtained via Koin to demonstrate DI integration.
+ *
+ * @param onNavigateToDetail Lambda to navigate to item detail (Example 1 + 5).
+ * @param onNavigateToSettings Lambda to navigate to Settings (Example 1).
+ */
 @Composable
 fun HomeScreen(
+    onNavigateToDetail: (String) -> Unit = {},
+    onNavigateToSettings: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel<HomeViewModel>(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -42,7 +54,9 @@ fun HomeScreen(
         HomeContent(
             state = state,
             onRefresh = viewModel::randomImage,
-            onDarkMode = viewModel::darkMode
+            onDarkMode = viewModel::darkMode,
+            onNavigateToDetail = { onNavigateToDetail(state.data?.id ?: "1") },
+            onNavigateToSettings = onNavigateToSettings,
         )
     }
 }
@@ -52,14 +66,24 @@ private fun HomeContent(
     state: HomeUiState,
     onRefresh: () -> Unit,
     onDarkMode: () -> Unit,
+    onNavigateToDetail: () -> Unit,
+    onNavigateToSettings: () -> Unit,
 ) {
     Scaffold(
         topBar = {
-            AppBar(title = "Compose Skeleton", actions = {
+            AppBar(title = "CMP Navigation", actions = {
+                IconButton(onClick = onNavigateToSettings) {
+                    Icon(
+                        Icons.Default.Settings,
+                        contentDescription = "Settings",
+                        tint = androidx.compose.material3.MaterialTheme.colorScheme.onPrimary,
+                    )
+                }
                 IconButton(onClick = onDarkMode) {
                     Icon(
                         if (state.isDarkMode) Icons.Default.BedtimeOff else Icons.Default.Bedtime,
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = androidx.compose.material3.MaterialTheme.colorScheme.onPrimary,
                     )
                 }
             })
@@ -83,7 +107,10 @@ private fun HomeContent(
                 }
 
                 else -> {
-                    Card(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
+                    Card(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                        onClick = onNavigateToDetail,
+                    ) {
                         NetworkImage(
                             imageUrl = state.data.url,
                             contentDescription = "Image",

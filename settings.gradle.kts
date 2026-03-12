@@ -1,4 +1,4 @@
-rootProject.name = "kmp-compose-gradle-skeleton"
+rootProject.name = "cmp-navigation-3-example"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -20,3 +20,5 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 include(":androidApp")
+include(":feature-catalog")
+include(":feature-profile")
