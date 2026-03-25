@@ -29,7 +29,6 @@ import com.santimattius.kmp.compose.core.ui.components.AppBar
 import com.santimattius.kmp.compose.core.ui.components.ErrorView
 import com.santimattius.kmp.compose.core.ui.components.LoadingIndicator
 import com.santimattius.kmp.compose.core.ui.components.NetworkImage
-import com.santimattius.kmp.compose.core.ui.themes.AppTheme
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -48,17 +47,13 @@ fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel<HomeViewModel>(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    AppTheme(
-        darkTheme = state.isDarkMode
-    ) {
-        HomeContent(
-            state = state,
-            onRefresh = viewModel::randomImage,
-            onDarkMode = viewModel::darkMode,
-            onNavigateToDetail = { onNavigateToDetail(state.data?.id ?: "1") },
-            onNavigateToSettings = onNavigateToSettings,
-        )
-    }
+    HomeContent(
+        state = state,
+        onRefresh = viewModel::randomImage,
+        onDarkMode = viewModel::darkMode,
+        onNavigateToDetail = { onNavigateToDetail(state.data?.id ?: "1") },
+        onNavigateToSettings = onNavigateToSettings,
+    )
 }
 
 @Composable

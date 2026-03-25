@@ -87,6 +87,8 @@ kotlin {
             implementation(libs.jetbrains.navigation3.ui)
             implementation(libs.jetbrains.material3.adaptiveNavigation3)
             implementation(libs.jetbrains.lifecycle.viewmodelNavigation3)
+            // Navigation Event (predictive back)
+            implementation(libs.jetbrains.navigationevent.compose)
 
             // Feature modules
             implementation(project(":feature-catalog"))

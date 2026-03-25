@@ -1,6 +1,7 @@
 package com.santimattius.kmp.compose
 
 import androidx.compose.runtime.Composable
+import com.santimattius.kmp.compose.core.ui.themes.AppTheme
 import com.santimattius.kmp.compose.di.applicationModules
 import com.santimattius.kmp.compose.navigation.AppNavigation
 import org.koin.compose.KoinMultiplatformApplication
@@ -13,6 +14,8 @@ fun MainApplication() {
     KoinMultiplatformApplication(
         config = koinConfiguration { modules(applicationModules()) }
     ) {
-        AppNavigation()
+        AppTheme {
+            AppNavigation()
+        }
     }
 }

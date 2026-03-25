@@ -15,19 +15,11 @@ import androidx.compose.ui.graphics.Color
 fun AppBar(
     title: String = "",
     navigationIcon: @Composable () -> Unit = { },
-    containerColor: Color = MaterialTheme.colorScheme.primary,
-    titleContentColor: Color = MaterialTheme.colorScheme.onPrimary,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     TopAppBar(
         title = { Text(text = title) },
         navigationIcon = navigationIcon,
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = containerColor,
-            titleContentColor = titleContentColor,
-            navigationIconContentColor = titleContentColor,
-            actionIconContentColor = titleContentColor,
-        ),
         actions = actions
     )
 }

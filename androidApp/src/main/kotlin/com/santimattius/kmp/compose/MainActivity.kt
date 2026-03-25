@@ -19,21 +19,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             App()
-            StatusBar()
-        }
-    }
-}
-
-@Composable
-fun StatusBar() {
-    val view = LocalView.current
-    val primaryColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f).toArgb()
-    val darkTheme = isSystemInDarkTheme()
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = primaryColor
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
 }

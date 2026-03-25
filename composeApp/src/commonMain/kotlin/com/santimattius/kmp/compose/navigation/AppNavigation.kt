@@ -32,6 +32,7 @@ import com.santimattius.kmp.compose.catalog.CatalogList
 import com.santimattius.kmp.compose.catalog.screens.CatalogDetailScreen
 import com.santimattius.kmp.compose.catalog.screens.CatalogListScreen
 import com.santimattius.kmp.compose.examples.basic.BasicSettingsScreen
+import com.santimattius.kmp.compose.examples.predictiveback.ScreenWithPredictiveBack
 import com.santimattius.kmp.compose.examples.viewmodel.ScopedDetailScreen
 import com.santimattius.kmp.compose.features.home.HomeScreen
 import com.santimattius.kmp.compose.profile.ProfileEdit
@@ -120,10 +121,15 @@ fun AppNavigation() {
                     )
                 }
 
+                // --- Example 6: Predictive back with Navigation Event ---
                 entry<SettingsRoute> {
-                    BasicSettingsScreen(
-                        onBack = { homeBackStack.removeLastOrNull() },
-                    )
+                    ScreenWithPredictiveBack(
+                        onNavigateBack = { homeBackStack.removeLastOrNull() },
+                    ) {
+                        BasicSettingsScreen(
+                            onBack = { homeBackStack.removeLastOrNull() },
+                        )
+                    }
                 }
 
                 // --- Example 2 + 4: Catalog with adaptive layout ---
